@@ -1,6 +1,6 @@
 import requests
 import pytz
-from datetime import datetime, time
+from datetime import datetime
 
 
 API_URL = 'https://devman.org/api/challenges/solution_attempts'
@@ -34,12 +34,8 @@ def is_midnighter(user_timestamp: float, user_timezone: str,
                   night_start_hour=0, night_end_hour=6):
 
     user_tz = pytz.timezone(user_timezone)
-    user_date_utc = datetime.fromtimestamp(user_timestamp, tz=pytz.utc)
-
-    user_localized_date = user_date_utc.astimezone(user_tz)
-    if night_start_hour <= user_localized_date.hour <= night_end_hour:
-        return True
-    return False
+    user_localized_date = datetime.fromtimestamp(user_timestamp, tz=user_tz)
+    return night_start_hour <= user_localized_date.hour <= night_end_hour
 
 
 def get_midnighters(users_attempts):
